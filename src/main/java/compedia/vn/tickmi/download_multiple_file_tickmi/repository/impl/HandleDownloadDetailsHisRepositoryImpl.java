@@ -1,0 +1,6 @@
+package compedia.vn.tickmi.download_multiple_file_tickmi.repository.impl;
+
+import compedia.vn.tickmi.download_multiple_file_tickmi.repository.HandleDownloadDetailsHisRepositoryCustom;
+
+public class HandleDownloadDetailsHisRepositoryImpl implements HandleDownloadDetailsHisRepositoryCustom {
+}
