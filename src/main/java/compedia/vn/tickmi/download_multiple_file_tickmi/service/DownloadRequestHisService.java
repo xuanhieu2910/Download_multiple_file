@@ -6,7 +6,9 @@ import compedia.vn.tickmi.download_multiple_file_tickmi.repository.DownloadReque
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,6 +36,7 @@ public class DownloadRequestHisService {
             requestHis.setContentUser(rq.getContentUser());
             requestHis.setContentTemplateTicket(rq.getContentTemplateTicket());
             requestHis.setIdRequestDownload(rq.getIdRequestDownload());
+            requestHis.setTimeCreated(new Timestamp(new Date().getTime()));
             response.add(requestHis);
         }
         return response;

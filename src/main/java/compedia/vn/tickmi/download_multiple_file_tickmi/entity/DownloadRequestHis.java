@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -38,4 +39,6 @@ public class DownloadRequestHis {
     private String contentTemplateTicket;
     @Column(name = "ID_REQUEST_DOWNLOAD")
     private Long idRequestDownload;
+    @Column(name = "TIME_CREATED")
+    private Timestamp timeCreated;
 }

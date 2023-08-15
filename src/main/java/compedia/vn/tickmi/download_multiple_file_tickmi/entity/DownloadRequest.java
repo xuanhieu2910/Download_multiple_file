@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 
 @Getter
@@ -36,4 +37,6 @@ public class DownloadRequest {
     private  Integer flatStatus;
     @Column(name = "TICKET_EVENT_ID")
     private Long ticketEventId;
+    @Column(name = "TIME_CREATED")
+    private Timestamp timeCreated;
 }
