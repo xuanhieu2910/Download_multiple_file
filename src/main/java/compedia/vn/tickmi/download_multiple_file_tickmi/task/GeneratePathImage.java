@@ -40,7 +40,6 @@ public class GeneratePathImage implements Runnable{
     public void run() {
         try {
             handleSyncRecord(this.handleDownloadDetails);
-            log.info("[SUCCESS] Handle record export file success!");
         }catch (Exception e) {
             handleSyncRecordFalse(this.handleDownloadDetails);
             log.error("[ERROR] Handle record false reason: ", e.getMessage());
@@ -111,7 +110,6 @@ public class GeneratePathImage implements Runnable{
     private HandleDownloadDetailsHis createHandleDRDHis(HandleDownloadDetails handleDownloadDetails,
                                                         String pathImage,Integer status){
         HandleDownloadDetailsHis handleDRDHis = new HandleDownloadDetailsHis();
-        handleDRDHis.setContentTemplateTicket(handleDownloadDetails.getContentTemplateTicket());
         handleDRDHis.setContentUser(handleDownloadDetails.getContentUser());
         handleDRDHis.setStatus(status);
         handleDRDHis.setEventId(handleDownloadDetails.getEventId());
@@ -120,6 +118,14 @@ public class GeneratePathImage implements Runnable{
         handleDRDHis.setPathFile(pathImage);
         handleDRDHis.setTicketEventId(handleDownloadDetails.getTicketEventId());
         handleDRDHis.setCreateTime(new Timestamp(new Date().getTime()));
+        handleDRDHis.setHtml(handleDownloadDetails.getHtml());
+        handleDRDHis.setDesignHtml(handleDownloadDetails.getDesignHtml());
+        handleDRDHis.setWidth(handleDownloadDetails.getWidth());
+        handleDRDHis.setHeight(handleDownloadDetails.getHeight());
+        handleDRDHis.setHtmlReplace(handleDownloadDetails.getHtmlReplace());
+        handleDRDHis.setJsonData(handleDownloadDetails.getJsonData());
+        handleDRDHis.setIsNewTool(handleDownloadDetails.getIsNewTool());
+        handleDRDHis.setPathImage(handleDownloadDetails.getPathImage());
         return handleDRDHis;
     }
 

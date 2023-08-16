@@ -31,12 +31,28 @@ public class DownloadRequest {
     private Integer totalRecordFinished;
     @Column(name = "EVENT_ID")
     private Long eventId;
-    @Column(name = "CONTENT_TEMPLATE_TICKET")
-    private String contentTemplateTicket;
     @Column(name = "FLAT_STATUS")
     private  Integer flatStatus;
     @Column(name = "TICKET_EVENT_ID")
     private Long ticketEventId;
     @Column(name = "TIME_CREATED")
     private Timestamp timeCreated;
+    @Column(name = "HTML")
+    private String html;
+    @Column(name = "DESIGN_HTML")
+    private String designHtml;
+    @Column(name = "WIDTH")
+    private Integer width;
+    @Column(name = "HEIGHT")
+    private Integer height;
+    @Column(name = "HTML_REPLACE")
+    private String htmlReplace;
+    @Column(name = "JSON_DATA")
+    private String jsonData;
+    @Column(name = "IS_NEW_TOOL")
+    private Integer isNewTool;
+    @Column(name = "PATH_IMAGE")
+    private String pathImage;
+
+
 }

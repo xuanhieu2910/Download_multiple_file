@@ -42,9 +42,24 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
                 dto.setTotalRecord(ValueUtil.getIntegerByObject(obj[4]));
                 dto.setTotalRecordFinished(ValueUtil.getIntegerByObject(obj[5]));
                 dto.setEventId(ValueUtil.getLongByObject(obj[6]));
-                dto.setContentTemplateTicket(ValueUtil.getClobString((Clob) obj[7]));
-                dto.setFlatStatus(ValueUtil.getIntegerByObject(obj[8]));
-                dto.setTicketEventId(ValueUtil.getLongByObject(obj[9]));
+                dto.setFlatStatus(ValueUtil.getIntegerByObject(obj[7]));
+                dto.setTicketEventId(ValueUtil.getLongByObject(obj[8]));
+                if (null != obj[9]) {
+                    dto.setHtml(ValueUtil.getClobString((Clob) obj[9]) == null ? "" : ValueUtil.getClobString((Clob) obj[9]));
+                }
+                if (null != obj[10]) {
+                    dto.setDesignHtml(ValueUtil.getClobString((Clob) obj[10]) == null ? "" : ValueUtil.getClobString((Clob) obj[10]));
+                }
+                dto.setWidth(ValueUtil.getIntegerByObject(obj[11]) == null ? 0 : ValueUtil.getIntegerByObject(obj[11]));
+                dto.setHeight(ValueUtil.getIntegerByObject(obj[12]) == null ? 0 : ValueUtil.getIntegerByObject(obj[12]));
+                if (null != obj[13]) {
+                    dto.setHtmlReplace(ValueUtil.getClobString((Clob) obj[13]) == null ? "" : ValueUtil.getClobString((Clob) obj[13]));
+                }
+                if (null != obj[14]) {
+                    dto.setJsonData(ValueUtil.getClobString((Clob) obj[14]));
+                }
+                dto.setIsNewTool(ValueUtil.getIntegerByObject(obj[15]));
+                dto.setPathImage(ValueUtil.getStringByObject(obj[16]) == null ? "" : ValueUtil.getStringByObject(obj[16]));
                 response.add(dto);
             }
         }
@@ -89,9 +104,16 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
             "       requestDownload.TOTAL_RECORD, " +
             "       requestDownload.TOTAL_RECORD_FINISHED, " +
             "       requestDownload.EVENT_ID, " +
-            "       requestDownload.CONTENT_TEMPLATE_TICKET, " +
             "       requestDownload.FLAT_STATUS, " +
-            "       requestDownload.TICKET_EVENT_ID  " +
+            "       requestDownload.TICKET_EVENT_ID, " +
+            "       requestDownload.HTML, " +
+            "       requestDownload.DESIGN_HTML, " +
+            "       requestDownload.WIDTH, " +
+            "       requestDownload.HEIGHT, " +
+            "       requestDownload.HTML_REPLACE, " +
+            "       requestDownload.JSON_DATA, " +
+            "       requestDownload.IS_NEW_TOOL, " +
+            "       requestDownload.PATH_IMAGE " +
             "FROM DOWNLOAD_REQUEST requestDownload " +
             "WHERE requestDownload.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";

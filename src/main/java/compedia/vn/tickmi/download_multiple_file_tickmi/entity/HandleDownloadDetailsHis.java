@@ -17,8 +17,6 @@ public class HandleDownloadDetailsHis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_HANDLE_DOWNLOAD_DETAILS_HIS")
     private Long idHandleDownloadDetailsHis;
-    @Column(name = "CONTENT_TEMPLATE_TICKET")
-    private String contentTemplateTicket;
     @Column(name = "CONTENT_USER")
     private String contentUser;
     @Column(name = "STATUS")
@@ -35,5 +33,21 @@ public class HandleDownloadDetailsHis {
     private Long ticketEventId;
     @Column(name = "CREATE_TIME")
     private Timestamp createTime;
+    @Column(name = "HTML")
+    private String html;
+    @Column(name = "DESIGN_HTML")
+    private String designHtml;
+    @Column(name = "WIDTH")
+    private Integer width;
+    @Column(name = "HEIGHT")
+    private Integer height;
+    @Column(name = "HTML_REPLACE")
+    private String htmlReplace;
+    @Column(name = "JSON_DATA")
+    private String jsonData;
+    @Column(name = "IS_NEW_TOOL")
+    private Integer isNewTool;
+    @Column(name = "PATH_IMAGE")
+    private String pathImage;
 
 }

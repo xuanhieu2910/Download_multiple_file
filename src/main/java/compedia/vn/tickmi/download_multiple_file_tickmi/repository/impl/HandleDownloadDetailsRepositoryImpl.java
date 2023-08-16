@@ -36,13 +36,28 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
             for (Object[] obj: result) {
                 HandleDownloadDetails dto = new HandleDownloadDetails();
                 dto.setIdHandleDownloadDetails(ValueUtil.getLongByObject(obj[0]));
-                dto.setContentTemplateTicket(ValueUtil.getClobString((Clob) obj[1]));
-                dto.setContentUser(ValueUtil.getClobString((Clob) obj[2]));
-                dto.setStatus(ValueUtil.getIntegerByObject(obj[3]));
-                dto.setEventId(ValueUtil.getLongByObject(obj[4]));
-                dto.setRequestDownloadId(ValueUtil.getLongByObject(obj[5]));
-                dto.setRetry(ValueUtil.getIntegerByObject(obj[6]));
-                dto.setTicketEventId(ValueUtil.getLongByObject(obj[7]));
+                dto.setContentUser(ValueUtil.getClobString((Clob) obj[1]));
+                dto.setStatus(ValueUtil.getIntegerByObject(obj[2]));
+                dto.setEventId(ValueUtil.getLongByObject(obj[3]));
+                dto.setRequestDownloadId(ValueUtil.getLongByObject(obj[4]));
+                dto.setRetry(ValueUtil.getIntegerByObject(obj[5]));
+                dto.setTicketEventId(ValueUtil.getLongByObject(obj[6]));
+                if (null != obj[7]) {
+                    dto.setHtml(ValueUtil.getClobString((Clob) obj[7]) == null ? "" : ValueUtil.getClobString((Clob) obj[7]));
+                }
+                if (null != obj[8]) {
+                    dto.setDesignHtml(ValueUtil.getClobString((Clob) obj[8]) == null ? "" : ValueUtil.getClobString((Clob) obj[8]));
+                }
+                dto.setWidth(ValueUtil.getIntegerByObject(obj[9]) == null ? 0 : ValueUtil.getIntegerByObject(obj[9]));
+                dto.setHeight(ValueUtil.getIntegerByObject(obj[10]) == null ? 0 : ValueUtil.getIntegerByObject(obj[10]));
+                if (null != obj[11]) {
+                    dto.setHtmlReplace(ValueUtil.getClobString((Clob) obj[11]) == null ? "" : ValueUtil.getClobString((Clob) obj[11]));
+                }
+                if (null != obj[12]) {
+                    dto.setJsonData(ValueUtil.getClobString((Clob) obj[12]) == null ? "" : ValueUtil.getClobString((Clob) obj[12]));
+                }
+                dto.setIsNewTool(ValueUtil.getIntegerByObject(obj[13]));
+                dto.setPathImage(ValueUtil.getStringByObject(obj[14]));
                 responses.add(dto);
             }
         }
@@ -67,13 +82,20 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
         query.executeUpdate();
     }
     private final static String SQL_findLimitHandleDownloadDetails = "SELECT ID_HANDLE_DOWNLOAD_DETAILS, " +
-            "       CONTENT_TEMPLATE_TICKET, " +
             "       CONTENT_USER, " +
             "       STATUS, " +
             "       EVENT_ID, " +
             "       REQUEST_DOWNLOAD_ID, " +
             "       RETRY, " +
-            "       TICKET_EVENT_ID " +
+            "       TICKET_EVENT_ID, " +
+            "       HTML,  " +
+            "       DESIGN_HTML, " +
+            "       WIDTH,  " +
+            "       HEIGHT,  " +
+            "       HTML_REPLACE,  " +
+            "       JSON_DATA,  " +
+            "       IS_NEW_TOOL,  " +
+            "       PATH_IMAGE " +
             "FROM HANDLE_DOWNLOAD_DETAILS handleDownloadDetails " +
             "WHERE handleDownloadDetails.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";

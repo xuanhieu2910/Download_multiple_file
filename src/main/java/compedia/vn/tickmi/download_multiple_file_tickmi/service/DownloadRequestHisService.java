@@ -34,9 +34,16 @@ public class DownloadRequestHisService {
             requestHis.setTotalRecordFinished(rq.getTotalRecordFinished());
             requestHis.setTicketEventId(rq.getTicketEventId());
             requestHis.setContentUser(rq.getContentUser());
-            requestHis.setContentTemplateTicket(rq.getContentTemplateTicket());
             requestHis.setIdRequestDownload(rq.getIdRequestDownload());
             requestHis.setTimeCreated(new Timestamp(new Date().getTime()));
+            requestHis.setHtml(rq.getHtml());
+            requestHis.setDesignHtml(rq.getDesignHtml());
+            requestHis.setWidth(rq.getWidth());
+            requestHis.setHeight(rq.getHeight());
+            requestHis.setHtmlReplace(rq.getHtmlReplace());
+            requestHis.setJsonData(rq.getJsonData());
+            requestHis.setIsNewTool(rq.getIsNewTool());
+            requestHis.setPathImage(rq.getPathImage());
             response.add(requestHis);
         }
         return response;

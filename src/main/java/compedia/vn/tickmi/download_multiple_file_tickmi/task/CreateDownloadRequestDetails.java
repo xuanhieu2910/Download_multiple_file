@@ -33,13 +33,20 @@ public class CreateDownloadRequestDetails implements  Runnable{
                 int totalRecord = downloadRequest.getTotalRecord();
                 for (int i = 0; i < totalRecord; i++) {
                     HandleDownloadDetails detail = new HandleDownloadDetails();
-                    detail.setContentTemplateTicket(downloadRequest.getContentTemplateTicket());
                     detail.setContentUser(recordsDownload.get(i));
                     detail.setStatus(DbConstant.NEW_STATUS_HANDLE_DOWNLOAD_DETAILS);
                     detail.setEventId(downloadRequest.getEventId());
                     detail.setRequestDownloadId(downloadRequest.getIdRequestDownload());
                     detail.setRetry(DbConstant.RETRY_HANDLE);
                     detail.setTicketEventId(downloadRequest.getTicketEventId());
+                    detail.setHtml(downloadRequest.getHtml());
+                    detail.setDesignHtml(downloadRequest.getDesignHtml());
+                    detail.setWidth(downloadRequest.getWidth());
+                    detail.setHeight(downloadRequest.getHeight());
+                    detail.setHtmlReplace(downloadRequest.getHtmlReplace());
+                    detail.setJsonData(downloadRequest.getJsonData());
+                    detail.setIsNewTool(downloadRequest.getIsNewTool());
+                    detail.setPathImage(downloadRequest.getPathImage());
                     responses.add(detail);
                 }
                 handleDownloadDetailsService.saveAllHandleDownloadDetails(responses);

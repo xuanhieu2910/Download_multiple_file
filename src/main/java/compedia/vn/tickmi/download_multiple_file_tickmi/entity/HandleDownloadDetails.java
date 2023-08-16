@@ -16,8 +16,6 @@ public class HandleDownloadDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_HANDLE_DOWNLOAD_DETAILS")
     private Long idHandleDownloadDetails;
-    @Column(name = "CONTENT_TEMPLATE_TICKET")
-    private String contentTemplateTicket;
     @Column(name = "CONTENT_USER")
     private String contentUser;
     @Column(name = "STATUS")
@@ -30,4 +28,41 @@ public class HandleDownloadDetails {
     private Integer retry;
     @Column(name = "TICKET_EVENT_ID")
     private Long ticketEventId;
+    @Column(name = "HTML")
+    private String html;
+    @Column(name = "DESIGN_HTML")
+    private String designHtml;
+    @Column(name = "WIDTH")
+    private Integer width;
+    @Column(name = "HEIGHT")
+    private Integer height;
+    @Column(name = "HTML_REPLACE")
+    private String htmlReplace;
+    @Column(name = "JSON_DATA")
+    private String jsonData;
+    @Column(name = "IS_NEW_TOOL")
+    private Integer isNewTool;
+    @Column(name = "PATH_IMAGE")
+    private String pathImage;
+
+    @Override
+    public String toString() {
+        return "HandleDownloadDetails{" +
+                "idHandleDownloadDetails=" + idHandleDownloadDetails +
+                ", contentUser='" + contentUser + '\'' +
+                ", status=" + status +
+                ", eventId=" + eventId +
+                ", requestDownloadId=" + requestDownloadId +
+                ", retry=" + retry +
+                ", ticketEventId=" + ticketEventId +
+                ", html='" + html + '\'' +
+                ", designHtml='" + designHtml + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", htmlReplace='" + htmlReplace + '\'' +
+                ", jsonData='" + jsonData + '\'' +
+                ", isNewTool=" + isNewTool +
+                ", pathImage='" + pathImage + '\'' +
+                '}';
+    }
 }
