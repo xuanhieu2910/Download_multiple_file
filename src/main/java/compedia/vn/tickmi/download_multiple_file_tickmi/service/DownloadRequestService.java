@@ -31,8 +31,9 @@ public class DownloadRequestService {
     public void updateAmountByExportRecordSuccess(Long requestDownloadId) {
         downloadRequestRepository.updateAmountByExportRecordSuccess(requestDownloadId);
         downloadRequestHisRepository.updateAmountByExportRecordSuccess(requestDownloadId);
-        downloadRequestRepository.updateStatusDownloadRequestWhenFinishedProcess(requestDownloadId);
-        downloadRequestHisRepository.updateStatusDownloadRequestWhenFinishedProcess(requestDownloadId);
+        if (downloadRequestRepository.updateStatusDownloadRequestWhenFinishedProcess(requestDownloadId)) {
+            downloadRequestHisRepository.updateStatusDownloadRequestWhenFinishedProcess(requestDownloadId);
+        }
     }
 
     public void flatStatusByIdParent(Long parentId) {

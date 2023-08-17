@@ -89,11 +89,14 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
     @Transactional
     @Modifying
     @Override
-    public void updateStatusDownloadRequestWhenFinishedProcess(Long requestDownloadId) {
+    public boolean updateStatusDownloadRequestWhenFinishedProcess(Long requestDownloadId) {
         Query query = entityManager.createNativeQuery(SQL_updateStatusWhenDone);
         query.setParameter("statusDone",DbConstant.FINISHED_STATUS_REQUEST_DOWNLOAD);
         query.setParameter("idRequestDownload",requestDownloadId);
-        query.executeUpdate();
+        if (query.executeUpdate() > 0) {
+            return true;
+        }
+        return false;
     }
 
 

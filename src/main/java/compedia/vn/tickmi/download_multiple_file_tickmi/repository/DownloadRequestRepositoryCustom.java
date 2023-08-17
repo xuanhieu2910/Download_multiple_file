@@ -15,5 +15,5 @@ public interface DownloadRequestRepositoryCustom {
 
     void flatStatusByIdParent(Long parentId);
 
-    void updateStatusDownloadRequestWhenFinishedProcess(Long requestDownloadId);
+    boolean updateStatusDownloadRequestWhenFinishedProcess(Long requestDownloadId);
 }

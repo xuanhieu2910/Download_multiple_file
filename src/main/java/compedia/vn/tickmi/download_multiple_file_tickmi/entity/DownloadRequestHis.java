@@ -55,4 +55,6 @@ public class DownloadRequestHis {
     private Integer isNewTool;
     @Column(name = "PATH_IMAGE")
     private String pathImage;
+    @Column(name = "TIME_FINISHED")
+    private Integer timeFinished;
 }

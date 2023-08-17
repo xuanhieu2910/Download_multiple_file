@@ -70,8 +70,12 @@ public class DbConstant {
     public final static String ERROR_CONTENT = "Có lỗi xảy ra!";
 
 
+    // [LIMIT RECORD TO ZIP FILE]
+    public final static Integer LIMIT_RECORD_TO_HANDLE_ZIP_FILE = 5;
+    public final static Integer STATUS_HANDLE_ZIPPING_FILE = 4;
 
-
+    public final static Integer TYPE_FILE_DRAFT = 1;
+    public final static Integer TYPE_FILE_NOT_DRAFT = 2;
 
 
 

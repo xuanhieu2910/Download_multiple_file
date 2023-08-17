@@ -1,13 +1,17 @@
 package compedia.vn.tickmi.download_multiple_file_tickmi.service;
 
+import compedia.vn.tickmi.download_multiple_file_tickmi.dto.DownloadRequestHisFinished;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.DownloadRequest;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.DownloadRequestHis;
 import compedia.vn.tickmi.download_multiple_file_tickmi.repository.DownloadRequestHisRepository;
+import compedia.vn.tickmi.download_multiple_file_tickmi.utils.DbConstant;
+import compedia.vn.tickmi.download_multiple_file_tickmi.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +30,10 @@ public class DownloadRequestHisService {
         List<DownloadRequestHis> response = new ArrayList<>();
         for (DownloadRequest rq : downloadRequests) {
             DownloadRequestHis requestHis = new DownloadRequestHis();
-            requestHis.setPathFile(rq.getPathFile() == null ? null : rq.getPathFile());
+
+            String filePathParent = FileUtils.createNameFile(rq.getEventId(), rq.getTicketEventId(),
+                    DbConstant.TYPE_FILE_NOT_DRAFT);
+            requestHis.setPathFile(filePathParent);
             requestHis.setStatus(rq.getStatus());
             requestHis.setTotalRecord(rq.getTotalRecord());
             requestHis.setEventId(rq.getEventId());
@@ -47,5 +54,22 @@ public class DownloadRequestHisService {
             response.add(requestHis);
         }
         return response;
+    }
+
+    public List<DownloadRequestHisFinished> getDownloadHisFinishedToZipFile(){
+        List<DownloadRequestHisFinished> responses = downloadRequestHisRepository.getDownloadRequestHisToZipWithSizeLimit();
+        responses.stream().forEach(x -> x.setTimeFinished(calculatorTime(x)));
+        downloadRequestHisRepository.updateStatusDownloadRecordZipped(responses);
+        return responses;
+    }
+
+    private Integer calculatorTime(DownloadRequestHisFinished re) {
+        long begin = System.currentTimeMillis();
+        String pathFile = FileUtils.exportToFileZip(Arrays.asList(re.getPathFileChild()),re.getEventId(),
+                                                re.getTicketEventId(),DbConstant.TYPE_FILE_DRAFT);
+        FileUtils.deleteFileDraw(pathFile);
+        long end = System.currentTimeMillis();
+        long timeFinished = (begin - end) / 60000;
+        return Math.round(timeFinished * re.getTotalRecordFinished());
     }
 }

@@ -2,6 +2,7 @@ package compedia.vn.tickmi.download_multiple_file_tickmi.task;
 
 
 import com.antkorwin.xsync.XSync;
+import compedia.vn.tickmi.download_multiple_file_tickmi.dto.DownloadRequestHisFinished;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.DownloadRequest;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.HandleDownloadDetails;
 import compedia.vn.tickmi.download_multiple_file_tickmi.service.DownloadRequestHisService;
@@ -50,6 +51,8 @@ public class TaskHandleRequestDownload {
     private static final ExecutorService executor = Executors.newFixedThreadPool(DbConstant.SIZE_POOL_THREAD);
 
     private static final Queue<HandleDownloadDetails> queueHandleDownloadDetails = new ConcurrentLinkedQueue<>();
+
+    private static final Queue<DownloadRequestHisFinished> queueDownloadRequestHisFinished = new ConcurrentLinkedQueue<>();
 
     /**
      * TODO: Process to get Data from Table: Request download -> Push: Queue to handle Request Download
@@ -119,4 +122,38 @@ public class TaskHandleRequestDownload {
             executor.execute(worker);
         }
     }
+
+
+    /**
+     * TODO: Get record success to ZIP file
+     * */
+    @Scheduled(fixedRate = 3000)
+    public void taskToZipFile(){
+        if (DbConstant.IS_FLAT_RUN_JOB) {
+            if (queueDownloadRequestHisFinished.isEmpty()) {
+                List<DownloadRequestHisFinished> downloadRequestHisFinisheds = downloadRequestHisService.getDownloadHisFinishedToZipFile();
+                if (!CollectionUtils.isEmpty(downloadRequestHisFinisheds)) {
+                    queueDownloadRequestHisFinished.addAll(downloadRequestHisFinisheds);
+                }
+            }
+        }
+    }
+
+    /**
+     * TODO: Queue to handle sub request download details
+     * */
+    @Async
+    @Scheduled(fixedRate = 50)
+    public void processToZipFiles() {
+        if (!queueRequestDownloads.isEmpty()) {
+            DownloadRequestHisFinished req = queueDownloadRequestHisFinished.poll();
+            if (null == req) {
+                return;
+            }
+            Runnable worker = new TaskProcessZipFile(downloadRequestHisService, req);
+            executor.execute(worker);
+        }
+    }
+
+
 }
