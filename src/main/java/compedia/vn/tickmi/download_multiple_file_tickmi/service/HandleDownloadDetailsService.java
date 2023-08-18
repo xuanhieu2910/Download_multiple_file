@@ -34,8 +34,8 @@ public class HandleDownloadDetailsService {
         handleDownloadDetailsRepository.deleteByIdHandleDownloadDetails(idHandleDownloadDetails);
     }
 
-    public void updateRetryHandleDownloadDetailsByIdAndRetry (Long id) {
-        handleDownloadDetailsRepository.updateRetryIncrementByIdHandleDownloadDetailsAndRetry(id);
+    public void updateRetryAndStatusHandleDownloadDetailsByIdAndRetry (Long id) {
+        handleDownloadDetailsRepository.updateRetryAndStatusIncrementByIdHandleDownloadDetailsAndRetry(id);
     }
 
 

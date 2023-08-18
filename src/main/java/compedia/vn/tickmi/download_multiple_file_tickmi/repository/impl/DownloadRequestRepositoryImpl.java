@@ -60,6 +60,8 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
                 }
                 dto.setIsNewTool(ValueUtil.getIntegerByObject(obj[15]));
                 dto.setPathImage(ValueUtil.getStringByObject(obj[16]) == null ? "" : ValueUtil.getStringByObject(obj[16]));
+                dto.setIsFree(ValueUtil.getIntegerByObject(obj[17]));
+                dto.setTypeDownload(ValueUtil.getIntegerByObject(obj[18]));
                 response.add(dto);
             }
         }
@@ -116,7 +118,9 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
             "       requestDownload.HTML_REPLACE, " +
             "       requestDownload.JSON_DATA, " +
             "       requestDownload.IS_NEW_TOOL, " +
-            "       requestDownload.PATH_IMAGE " +
+            "       requestDownload.PATH_IMAGE," +
+            "       requestDownload.IS_FREE, " +
+            "       requestDownload.TYPE_DOWNLOAD" +
             "FROM DOWNLOAD_REQUEST requestDownload " +
             "WHERE requestDownload.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";

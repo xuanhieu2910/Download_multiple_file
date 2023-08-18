@@ -15,4 +15,10 @@ public interface DownloadRequestHisRepositoryCustom {
     List<DownloadRequestHisFinished> getDownloadRequestHisToZipWithSizeLimit ();
 
     void updateStatusDownloadRecordZipped(List<DownloadRequestHisFinished> responses);
+
+    void updateStatusFinishedToZipFile(Long ticketEventId, String pathFileZip);
+
+    void updateAmountRetryWhenZipFile(Long ticketEventId);
+
+    void updateStatusWhenZipFile(Long ticketEventId, Integer status);
 }

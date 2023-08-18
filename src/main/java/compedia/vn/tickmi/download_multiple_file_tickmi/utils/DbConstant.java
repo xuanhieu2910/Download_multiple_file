@@ -17,12 +17,12 @@ public class DbConstant {
     @PostConstruct
     public void setUpConfigData() {
         URL = env.getProperty("vn.compedia.location.upload");
+        STATIC_CONTEXT = env.getProperty("vn.compedia.static.context");
+        DOMAIN_FILE = env.getProperty("vn.compedia.static.file.avatar_path");
     }
 
     public static String URL;
 
-    // Seperate of records download
-    public final static String SEPERATE_RECORDS_DOWNLOAD = ";";
 
     // POOL_THREAD
     public final static Integer SIZE_POOL_THREAD = 20;
@@ -73,13 +73,31 @@ public class DbConstant {
     // [LIMIT RECORD TO ZIP FILE]
     public final static Integer LIMIT_RECORD_TO_HANDLE_ZIP_FILE = 5;
     public final static Integer STATUS_HANDLE_ZIPPING_FILE = 4;
+    public final static Integer STATUS_HANDLE_ZIP_FILE_DONE = 5; // Hoàn thiện tất cả quy trình
+    public final static Integer STATUS_HANDLE_ZIP_FILE_FALSE = 6;
+    public final static Integer STATUS_TIME_FINISHED_ZIPPED_FILE = -1; // Đã hoàn thiện việc zip file
 
     public final static Integer TYPE_FILE_DRAFT = 1;
     public final static Integer TYPE_FILE_NOT_DRAFT = 2;
+    public final static Integer CONSTRUCTOR_RETRY_HANDLE_ZIP_FILE = 0;
 
 
+    public static String  STATIC_CONTEXT;
 
 
+    // Type design tool
+    public static final Integer NEW_DESIGN_TOOL = 1;
+    public static final Integer OLD_DESIGN_TOOL = 0;
+
+    // Type convert
+    public static final Integer CONVERT_TO_IMAGE = 1;
+    public static final Integer CONVERT_TO_PDF = 2;
+
+    public static String DOMAIN_FILE;
+
+    // Seperate of records download
+    public static final String SEPARATOR_CONTENT_USER_TMP = "|<>|"; // Thứ tự :  NAME_GUEST => EMAIL_GUEST => PHONE_GUEST => NOTE_GUEST => TICKET_ID
+    public static final String SEPARATOR_CONTENT_USER = "<[]>";
 
 
 }

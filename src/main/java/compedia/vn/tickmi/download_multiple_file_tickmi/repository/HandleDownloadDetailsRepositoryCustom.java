@@ -10,7 +10,7 @@ public interface HandleDownloadDetailsRepositoryCustom {
 
     List<HandleDownloadDetails> findAllHandleDownloadDetailsLimit() throws SQLException, IOException;
 
-    void updateRetryIncrementByIdHandleDownloadDetailsAndRetry(Long idRecord);
+    void updateRetryAndStatusIncrementByIdHandleDownloadDetailsAndRetry(Long idRecord);
 
     void deleteByIdHandleDownloadDetails(Long idRecord);
 

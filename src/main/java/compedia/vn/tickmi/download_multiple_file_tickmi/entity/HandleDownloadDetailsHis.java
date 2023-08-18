@@ -49,5 +49,9 @@ public class HandleDownloadDetailsHis {
     private Integer isNewTool;
     @Column(name = "PATH_IMAGE")
     private String pathImage;
+    @Column(name = "IS_FREE")
+    private Integer isFree;
+    @Column(name = "TYPE_DOWNLOAD")
+    private Integer typeDownload;
 
 }

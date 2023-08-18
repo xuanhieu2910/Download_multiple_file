@@ -15,4 +15,7 @@ public class DownloadRequestHisFinished {
     private Integer totalRecordFinished;
     private Integer timeFinished;
     private String pathFileParent;
+    private Integer retry;
+
+    private Integer isFree;
 }

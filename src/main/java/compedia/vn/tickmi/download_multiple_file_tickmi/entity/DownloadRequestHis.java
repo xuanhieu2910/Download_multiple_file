@@ -57,4 +57,10 @@ public class DownloadRequestHis {
     private String pathImage;
     @Column(name = "TIME_FINISHED")
     private Integer timeFinished;
+    @Column(name = "RETRY")
+    private Integer retry;
+    @Column(name = "IS_FREE")
+    private Integer isFree;
+    @Column(name = "TYPE_DOWNLOAD")
+    private Integer typeDownload;
 }

@@ -28,7 +28,7 @@ public class CreateDownloadRequestDetails implements  Runnable{
     public void run() {
         try {
             List<HandleDownloadDetails> responses = new ArrayList<>();
-            List<String> recordsDownload = Arrays.asList(downloadRequest.getContentUser().split(DbConstant.SEPERATE_RECORDS_DOWNLOAD));
+            List<String> recordsDownload = Arrays.asList(downloadRequest.getContentUser().split(DbConstant.SEPARATOR_CONTENT_USER));
             if (!CollectionUtils.isEmpty(recordsDownload) && recordsDownload.size() == downloadRequest.getTotalRecord()) {
                 int totalRecord = downloadRequest.getTotalRecord();
                 for (int i = 0; i < totalRecord; i++) {
@@ -47,6 +47,8 @@ public class CreateDownloadRequestDetails implements  Runnable{
                     detail.setJsonData(downloadRequest.getJsonData());
                     detail.setIsNewTool(downloadRequest.getIsNewTool());
                     detail.setPathImage(downloadRequest.getPathImage());
+                    detail.setIsFree(downloadRequest.getIsFree());
+                    detail.setTypeDownload(downloadRequest.getTypeDownload());
                     responses.add(detail);
                 }
                 handleDownloadDetailsService.saveAllHandleDownloadDetails(responses);

@@ -53,6 +53,7 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
                 his.setPathFileChild(ValueUtil.getStringByObject(obj[2]));
                 his.setTotalRecordFinished(ValueUtil.getIntegerByObject(obj[3]));
                 his.setPathFileParent(ValueUtil.getStringByObject(obj[4]));
+                his.setIsFree(ValueUtil.getIntegerByObject(obj[5]));
                 response.add(his);
             }
         }
@@ -70,6 +71,38 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
             query.executeUpdate();
         }
     }
+    @Transactional
+    @Modifying
+    @Override
+    public void updateStatusFinishedToZipFile(Long ticketEventId, String pathFileZip) {
+        Query query = entityManager.createNativeQuery(SQL_updateStatusFinishedToZipFile);
+        query.setParameter("pathFile", pathFileZip);
+        query.setParameter("status", DbConstant.STATUS_HANDLE_ZIP_FILE_DONE);
+        query.setParameter("statusTimeFinished",DbConstant.STATUS_TIME_FINISHED_ZIPPED_FILE);
+        query.setParameter("ticketEventId", ticketEventId);
+        query.executeUpdate();
+    }
+
+    @Transactional
+    @Modifying
+    @Override
+    public void updateAmountRetryWhenZipFile(Long ticketEventId) {
+        Query query = entityManager.createNativeQuery(SQL_updateAmountRetryWhenZipFile);
+        query.setParameter("ticketEventId", ticketEventId);
+        query.setParameter("status", DbConstant.FINISHED_STATUS_REQUEST_DOWNLOAD);
+        query.executeUpdate();
+    }
+
+
+    @Transactional
+    @Modifying
+    @Override
+    public void updateStatusWhenZipFile(Long ticketEventId, Integer status) {
+        Query query = entityManager.createNativeQuery(SQL_updateStatusWhenZipFile);
+        query.setParameter("ticketEventId", ticketEventId);
+        query.setParameter("status",status);
+        query.executeUpdate();
+    }
 
 
     private static final String SQL_updateStatusWhenDone = "update DOWNLOAD_REQUEST_HIS his " +
@@ -85,13 +118,17 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
             "                     his.TICKET_EVENT_ID, " +
             "                     min(detailHis.PATH_FILE) keep ( dense_rank first order by detailHis.PATH_FILE) pathFileChild, " +
             "                     his.TOTAL_RECORD_FINISHED, " +
-            "                     his.PATH_FILE pathFileParent " +
+            "                     his.PATH_FILE                                                                  pathFileParent, " +
+            "                     his.IS_FREE " +
             "              FROM DOWNLOAD_REQUEST_HIS his " +
             "                       inner join HANDLE_DOWNLOAD_DETAILS_HIS detailHis " +
             "                                  on his.TICKET_EVENT_ID = detailHis.TICKET_EVENT_ID " +
             "              WHERE his.STATUS = :statusSuccess " +
-            "              group by his.EVENT_ID, his.TICKET_EVENT_ID, his.TOTAL_RECORD_FINISHED, his.PATH_FILE) " +
-            "SELECT root.EVENT_ID, root.TICKET_EVENT_ID, root.pathFileChild, root.TOTAL_RECORD_FINISHED, root.pathFileParent " +
+            "              group by his.EVENT_ID, his.TICKET_EVENT_ID, " +
+            "                       his.TOTAL_RECORD_FINISHED, his.PATH_FILE, his.IS_FREE) " +
+            "SELECT root.EVENT_ID, root.TICKET_EVENT_ID, " +
+            "       root.pathFileChild, root.TOTAL_RECORD_FINISHED, " +
+            "       root.pathFileParent, root.IS_FREE " +
             "FROM ROOT root " +
             "where ROWNUM <= : limitRecord ";
 
@@ -99,4 +136,18 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
             "SET his.STATUS = :status and his.TIME_FINISHED = :timeFinshed " +
             "WHERE his.TICKET_EVENT_ID in (:ticketEventIds) ";
 
+
+    private static final String SQL_updateStatusFinishedToZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
+            "SET his.PATH_FILE = :pathFile " +
+            "    AND his.STATUS = :status " +
+            "    AND his.TIME_FINISHED = :statusTimeFinished " +
+            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+
+    private static final String SQL_updateAmountRetryWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his  " +
+            "SET his.RETRY = his.RETRY + 1 AND his.STATUS = :status " +
+            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+
+    private static final String SQL_updateStatusWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
+            "SET his.STATUS = :status " +
+            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 }

@@ -1,12 +1,14 @@
 package compedia.vn.tickmi.download_multiple_file_tickmi.task;
 
 import com.antkorwin.xsync.XSync;
+import compedia.vn.tickmi.download_multiple_file_tickmi.dto.TicketToConvertImageAndPdfDto;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.HandleDownloadDetails;
 import compedia.vn.tickmi.download_multiple_file_tickmi.entity.HandleDownloadDetailsHis;
 import compedia.vn.tickmi.download_multiple_file_tickmi.service.DownloadRequestService;
 import compedia.vn.tickmi.download_multiple_file_tickmi.service.HandleDownloadDetailsHisService;
 import compedia.vn.tickmi.download_multiple_file_tickmi.service.HandleDownloadDetailsService;
 import compedia.vn.tickmi.download_multiple_file_tickmi.utils.DbConstant;
+import compedia.vn.tickmi.download_multiple_file_tickmi.utils.ExportImageOrPdfUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,11 +78,36 @@ public class GeneratePathImage implements Runnable{
 
 
     public void handleSyncRecordFalse (HandleDownloadDetails handleDownloadDetails) {
-        handleDRDService.updateRetryHandleDownloadDetailsByIdAndRetry(handleDownloadDetails.getIdHandleDownloadDetails());
+        handleDRDService.updateRetryAndStatusHandleDownloadDetailsByIdAndRetry(handleDownloadDetails.getIdHandleDownloadDetails());
     }
 
     private String engineHandleImage(HandleDownloadDetails handleDownloadDetails) {
-        return "path:\\";
+        TicketToConvertImageAndPdfDto dtoTicketToConvert = createTicketToConvertImageAndPdfDto(handleDownloadDetails);
+        return ExportImageOrPdfUtils.convertTicketToImageAndPdf();
+    }
+    //              0               1               2           3               4
+    // Thứ tự :  NAME_GUEST => EMAIL_GUEST => PHONE_GUEST => NOTE_GUEST => TICKET_ID
+    private TicketToConvertImageAndPdfDto createTicketToConvertImageAndPdfDto(HandleDownloadDetails handleDownloadDetails) {
+        TicketToConvertImageAndPdfDto dto = new TicketToConvertImageAndPdfDto();
+        String[] contentUser = handleDownloadDetails.getContentUser().split(DbConstant.SEPARATOR_CONTENT_USER_TMP);
+        dto.setTicketId(Long.valueOf(contentUser[4]));
+        dto.setNameGuest(contentUser[0]);
+        dto.setEmailGuest(contentUser[1]);
+        dto.setPhoneGuest(contentUser[2]);
+        dto.setNoteGuest(contentUser[3]);
+        dto.setPathQr(handleDownloadDetails.getPa);
+        dto.setHtml(handleDownloadDetails.getHtml());
+        dto.setHtmlReplace(handleDownloadDetails.getHtmlReplace());
+        dto.setWidth(handleDownloadDetails.getWidth());
+        dto.setHeight(handleDownloadDetails.getHeight());
+        dto.setTicketName();
+        dto.setAvatarPath();
+        dto.setIsDesign(handleDownloadDetails.getIsNewTool());
+        dto.setJsonData(handleDownloadDetails.getJsonData());
+        dto.setIsFree(handleDownloadDetails.getIsFree());
+
+
+
     }
 
     private void saveRecordDRDHis(HandleDownloadDetails handleDownloadDetails, String pathImage,Integer status) {
@@ -126,6 +153,8 @@ public class GeneratePathImage implements Runnable{
         handleDRDHis.setJsonData(handleDownloadDetails.getJsonData());
         handleDRDHis.setIsNewTool(handleDownloadDetails.getIsNewTool());
         handleDRDHis.setPathImage(handleDownloadDetails.getPathImage());
+        handleDRDHis.setIsFree(handleDownloadDetails.getIsFree());
+        handleDRDHis.setTypeDownload(handleDownloadDetails.getTypeDownload());
         return handleDRDHis;
     }
 

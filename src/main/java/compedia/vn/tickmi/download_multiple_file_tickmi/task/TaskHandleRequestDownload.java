@@ -36,7 +36,10 @@ public class TaskHandleRequestDownload {
     DownloadRequestService downloadRequestService;
 
     @Autowired
-    XSync<Long> xSync;
+    XSync<Long> xSyncForTaskHandleRequest;
+
+    @Autowired
+    XSync<Long> xSyncForTaskZipFile;
 
     @Autowired
     HandleDownloadDetailsService handleDownloadDetailsService;
@@ -118,7 +121,7 @@ public class TaskHandleRequestDownload {
             if (null == req) {
                 return;
             }
-            Runnable worker = new GeneratePathImage(req,xSync,downloadRequestService,handleDownloadDetailsService,handleDownloadDetailsHisService);
+            Runnable worker = new GeneratePathImage(req,xSyncForTaskHandleRequest,downloadRequestService,handleDownloadDetailsService,handleDownloadDetailsHisService);
             executor.execute(worker);
         }
     }
@@ -150,7 +153,7 @@ public class TaskHandleRequestDownload {
             if (null == req) {
                 return;
             }
-            Runnable worker = new TaskProcessZipFile(downloadRequestHisService, req);
+            Runnable worker = new TaskProcessZipFile(downloadRequestHisService, req,xSyncForTaskZipFile);
             executor.execute(worker);
         }
     }

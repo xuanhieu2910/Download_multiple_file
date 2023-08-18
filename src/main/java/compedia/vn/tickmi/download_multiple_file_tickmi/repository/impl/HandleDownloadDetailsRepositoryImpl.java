@@ -58,6 +58,8 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
                 }
                 dto.setIsNewTool(ValueUtil.getIntegerByObject(obj[13]));
                 dto.setPathImage(ValueUtil.getStringByObject(obj[14]));
+                dto.setIsFree(ValueUtil.getIntegerByObject(obj[15]));
+                dto.setTypeDownload(ValueUtil.getIntegerByObject(obj[16]));
                 responses.add(dto);
             }
         }
@@ -67,9 +69,10 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
     @Transactional
     @Modifying
     @Override
-    public void updateRetryIncrementByIdHandleDownloadDetailsAndRetry(Long idRecord) {
+    public void updateRetryAndStatusIncrementByIdHandleDownloadDetailsAndRetry(Long idRecord) {
         Query query = entityManager.createNativeQuery(SQL_updateAutoIncrementRetryByIdRecordAnd);
         query.setParameter("idRecord",idRecord);
+        query.setParameter("status", DbConstant.NEW_STATUS_HANDLE_DOWNLOAD_DETAILS);
         query.executeUpdate();
     }
 
@@ -95,14 +98,16 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
             "       HTML_REPLACE,  " +
             "       JSON_DATA,  " +
             "       IS_NEW_TOOL,  " +
-            "       PATH_IMAGE " +
+            "       PATH_IMAGE," +
+            "       IS_FREE, " +
+            "       TYPE_DOWNLOAD " +
             "FROM HANDLE_DOWNLOAD_DETAILS handleDownloadDetails " +
             "WHERE handleDownloadDetails.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";
 
 
     private final static String SQL_updateAutoIncrementRetryByIdRecordAnd = "UPDATE HANDLE_DOWNLOAD_DETAILS detail " +
-            "SET detail.RETRY = detail.RETRY + 1  " +
+            "SET detail.RETRY = detail.RETRY + 1  AND detail.STATUS = :status " +
             "WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord ";
 
     private final static String SQL_deleteRecordById = "DELETE HANDLE_DOWNLOAD_DETAILS detail " +

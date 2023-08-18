@@ -51,6 +51,9 @@ public class DownloadRequestHisService {
             requestHis.setJsonData(rq.getJsonData());
             requestHis.setIsNewTool(rq.getIsNewTool());
             requestHis.setPathImage(rq.getPathImage());
+            requestHis.setRetry(DbConstant.CONSTRUCTOR_RETRY_HANDLE_ZIP_FILE);
+            requestHis.setIsFree(rq.getIsFree());
+            requestHis.setTypeDownload(rq.getTypeDownload());
             response.add(requestHis);
         }
         return response;
@@ -71,5 +74,17 @@ public class DownloadRequestHisService {
         long end = System.currentTimeMillis();
         long timeFinished = (begin - end) / 60000;
         return Math.round(timeFinished * re.getTotalRecordFinished());
+    }
+
+    public void updateStatusFinishedToZipFile(Long ticketEventId, String pathFileZip) {
+        downloadRequestHisRepository.updateStatusFinishedToZipFile(ticketEventId, pathFileZip);
+    }
+
+    public void updateAmountRetryWhenZipFile (Long ticketEventId) {
+        downloadRequestHisRepository.updateAmountRetryWhenZipFile(ticketEventId);
+    }
+
+    public void updateStatusWhenZipFile (Long ticketEventId, Integer status){
+        downloadRequestHisRepository.updateStatusWhenZipFile(ticketEventId, status);
     }
 }

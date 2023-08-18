@@ -44,25 +44,9 @@ public class HandleDownloadDetails {
     private Integer isNewTool;
     @Column(name = "PATH_IMAGE")
     private String pathImage;
+    @Column(name = "IS_FREE")
+    private Integer isFree;
+    @Column(name = "TYPE_DOWNLOAD")
+    private Integer typeDownload;
 
-    @Override
-    public String toString() {
-        return "HandleDownloadDetails{" +
-                "idHandleDownloadDetails=" + idHandleDownloadDetails +
-                ", contentUser='" + contentUser + '\'' +
-                ", status=" + status +
-                ", eventId=" + eventId +
-                ", requestDownloadId=" + requestDownloadId +
-                ", retry=" + retry +
-                ", ticketEventId=" + ticketEventId +
-                ", html='" + html + '\'' +
-                ", designHtml='" + designHtml + '\'' +
-                ", width=" + width +
-                ", height=" + height +
-                ", htmlReplace='" + htmlReplace + '\'' +
-                ", jsonData='" + jsonData + '\'' +
-                ", isNewTool=" + isNewTool +
-                ", pathImage='" + pathImage + '\'' +
-                '}';
-    }
 }
