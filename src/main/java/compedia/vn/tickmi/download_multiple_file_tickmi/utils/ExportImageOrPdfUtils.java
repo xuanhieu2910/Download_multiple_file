@@ -28,7 +28,7 @@ public class ExportImageOrPdfUtils {
     public final static String FILE_HTML_TEMPLATE = "html";
     public final static String FILE_IMAGE_TEMPLATE = "image_template";
 
-    private String convertTicketToImageAndPdf(TicketToConvertImageAndPdfDto dtoTicketToConvert,
+    public static String convertTicketToImageAndPdf(TicketToConvertImageAndPdfDto dtoTicketToConvert,
                                               Integer typeConvert) throws Exception {
         ReplaceTemplateTicketDto dto = createReplaceTemplateTicketDto(dtoTicketToConvert);
         String content = null;
@@ -44,15 +44,16 @@ public class ExportImageOrPdfUtils {
             if (typeConvert.equals(DbConstant.CONVERT_TO_IMAGE)) {
                 filePathConvert = convertHtmlToImage(content,  dtoTicketToConvert.getTicketId(),
                         dtoTicketToConvert.getWidth(), dtoTicketToConvert.getHeight(),dtoTicketToConvert.getNameGuest(),
-                        dtoTicketToConvert.getNoteGuest());
+                        dtoTicketToConvert.getNoteGuest(),dtoTicketToConvert.getTicketEventId(), dtoTicketToConvert.getEventId());
             } else if (typeConvert.equals(DbConstant.CONVERT_TO_PDF)) {
-                filePathConvert = convertHtmlToPdf(content, dtoTicketToConvert.getTicketId());
+                filePathConvert = convertHtmlToPdf(content, dtoTicketToConvert.getTicketId(),
+                        dtoTicketToConvert.getTicketEventId(), dtoTicketToConvert.getEventId());
             }
             return filePathConvert;
         }
     }
 
-    private ReplaceTemplateTicketDto createReplaceTemplateTicketDto(TicketToConvertImageAndPdfDto dto) {
+    private static ReplaceTemplateTicketDto createReplaceTemplateTicketDto(TicketToConvertImageAndPdfDto dto) {
         ReplaceTemplateTicketDto response = new ReplaceTemplateTicketDto();
         response.setContentHtml(dto.getHtml());
         response.setHtmlReplace(dto.getHtmlReplace());
@@ -62,13 +63,6 @@ public class ExportImageOrPdfUtils {
         response.setNameGuest(dto.getNameGuest());
         response.setPhoneGuest(dto.getPhoneGuest());
         response.setNoteGuest(dto.getNoteGuest());
-        response.setTicketName(dto.getTicketName());
-        if (StringUtils.isNotBlank(dto.getAvatarPath())) {
-            response.setAvatarPath(dto.getAvatarPath());
-        }
-        if (StringUtils.isNotBlank(dto.getAvatarPath())) {
-            response.setAvatarPath(dto.getAvatarPath());
-        }
         response.setIsPackageFree(dto.getIsFree());
         response.setIsNewTool(dto.getIsDesign());
         if (null != dto.getIsDesign() && dto.getIsDesign().intValue() == DbConstant.NEW_DESIGN_TOOL) {
@@ -150,23 +144,20 @@ public class ExportImageOrPdfUtils {
         return " ";
     }
 
-    public static String convertHtmlToPdf(String contentHtml, Long idTemplateTicket) throws FileNotFoundException {
-        String pathReturnRoot = PropertiesUtil.getProperty("vn.compedia.static.location");
+    public static String convertHtmlToPdf(String contentHtml, Long ticketId, Long ticketEventId, Long eventId) throws FileNotFoundException {
+        String pathReturnRoot = FileUtils.createNameFile(eventId, ticketEventId, DbConstant.TYPE_FILE_NOT_DRAFT, DbConstant.CONVERT_TO_PDF);
         String random = generateFileId();
-        String todayFolder = SIMPLE_DATE_FORMAT.format(new Date());
-        String filePdfFolder = pathReturnRoot + File.separator + FILE_PDF_TEMPLATE + File.separator + todayFolder;
-        String filePdf = filePdfFolder + File.separator + random + "_" + idTemplateTicket + ".pdf";
-        File fileFolder = new File(filePdfFolder);
-        if (!fileFolder.exists() && !fileFolder.mkdirs()) {
-            log.error("Create folder pdf false!");
+        String filePdf = pathReturnRoot + File.separator + random + "_" + ticketId + ".pdf";
+        File fileFolder = new File(pathReturnRoot);
+        if (fileFolder.exists()) {
+            log.error("Folder parent exits. That right!!");
         } else {
             FileOutputStream fileOutputStream = new FileOutputStream(filePdf);
             log.info("Create file pdf success!");
         }
-        String pathReturn = File.separator + FILE_PDF_TEMPLATE + File.separator + todayFolder + File.separator + random + "_" + idTemplateTicket + ".pdf";
         String fileHtml = createFileHtml(contentHtml);
         String cmdStr = "google-chrome-stable --headless " + "--disable-gpu " + "--no-sandbox " + "--print-to-pdf-no-header " + "--print-to-pdf=" + "\"" + filePdf + "\" " + "\"" + fileHtml + "\"";
-        ;
+
         try {
             log.info("Start convert Pdf with cmdStr : " + cmdStr);
             Process process = new ProcessBuilder().command("bash", "-c", cmdStr).start();
@@ -193,7 +184,7 @@ public class ExportImageOrPdfUtils {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return pathReturn;
+        return filePdf;
     }
 
     private static String generateFileId() {
@@ -302,7 +293,8 @@ public class ExportImageOrPdfUtils {
     public static String createFileHtml(String contentHtml) {
         String todayFolder = SIMPLE_DATE_FORMAT.format(new Date());
         String random = generateFileId();
-        String rootPath = PropertiesUtil.getProperty("vn.cpa.static.location.upload") + File.separator + FILE_HTML_TEMPLATE + File.separator + todayFolder;
+        String rootPath = PropertiesUtil.getProperty("vn.cpa.static.location.upload")
+                + File.separator + FILE_HTML_TEMPLATE + File.separator + todayFolder;
         String fileHtml = rootPath + File.separator + random + ".html";
         byte[] content = contentHtml.getBytes();
         File file = new File(rootPath);
@@ -325,21 +317,20 @@ public class ExportImageOrPdfUtils {
     }
 
     public static String convertHtmlToImage(String contentHtml, Long idTemplateTicket, int width, int height,
-                                            String nameGuest, String note) throws FileNotFoundException {
+                                            String nameGuest, String note, Long ticketEventId, Long eventId) throws FileNotFoundException {
         nameGuest = StringUtil.removeTagHtml(nameGuest);
         note = StringUtil.removeTagHtml(note);
-        String pathReturnRoot = PropertiesUtil.getProperty("vn.compedia.static.location");
-        String todayFolder = SIMPLE_DATE_FORMAT.format(new Date());
-        String fileImageFolder = pathReturnRoot + File.separator + FILE_IMAGE_TEMPLATE + File.separator + todayFolder;
-        String fileImage = fileImageFolder + File.separator + nameGuest + "_" + note + "_" + idTemplateTicket + ".png";
-        File fileFolder = new File(fileImageFolder);
-        if (!fileFolder.exists() && !fileFolder.mkdirs()) {
-            log.error("Create folder image false!");
+        String pathReturnRoot = FileUtils.createNameFile(eventId, ticketEventId, DbConstant.TYPE_FILE_NOT_DRAFT, DbConstant.CONVERT_TO_IMAGE);
+
+        String fileImage = pathReturnRoot + File.separator + nameGuest + "_" + note + "_" + idTemplateTicket + ".png";
+        File fileFolder = new File(pathReturnRoot);
+        if (fileFolder.exists()) {
+            log.error("Folder parent exits. That right!!");
         } else {
             FileOutputStream fileOutputStream = new FileOutputStream(fileImage);
             log.info("Create file image success!");
         }
-        String pathReturn = File.separator + FILE_IMAGE_TEMPLATE + File.separator + todayFolder + File.separator + nameGuest + "_" + note + "_" + idTemplateTicket + ".png";
+
         String fileHtml = createFileHtml(contentHtml);
         String cmdStr = "google-chrome-stable --headless --disable-gpu  --screenshot=" + "\"" + fileImage + "\" --window-size=" + width + "," + height + " --no-sandbox " + fileHtml;
         try {
@@ -373,6 +364,6 @@ public class ExportImageOrPdfUtils {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return pathReturn;
+        return fileImage;
     }
 }

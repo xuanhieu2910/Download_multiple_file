@@ -40,12 +40,7 @@ public class GeneratePathImage implements Runnable{
 
     @Override
     public void run() {
-        try {
-            handleSyncRecord(this.handleDownloadDetails);
-        }catch (Exception e) {
-            handleSyncRecordFalse(this.handleDownloadDetails);
-            log.error("[ERROR] Handle record false reason: ", e.getMessage());
-        }
+        handleSyncRecord(this.handleDownloadDetails);
     }
 
 
@@ -62,8 +57,13 @@ public class GeneratePathImage implements Runnable{
     public void handleSyncRecord (HandleDownloadDetails handleDownloadDetails) {
         xSync.execute(handleDownloadDetails.getIdHandleDownloadDetails(), () -> {
             if (handleDownloadDetails.getRetry() <= DbConstant.RETRY_HANDLE) {
-                String pathImage = engineHandleImage(handleDownloadDetails);
-                saveRecordDRDHis(handleDownloadDetails,pathImage,DbConstant.STATUS_DETAIL_HIS_SUCCESS);
+                try {
+                    String pathImage = engineHandleImage(handleDownloadDetails);
+                    saveRecordDRDHis(handleDownloadDetails, pathImage, DbConstant.STATUS_DETAIL_HIS_SUCCESS);
+                }catch (Exception e) {
+                    handleSyncRecordFalse(this.handleDownloadDetails);
+                    log.error("[ERROR] Handle record false reason: ", e.getMessage());
+                }
                 deleteRecord(handleDownloadDetails.getIdHandleDownloadDetails());
                 updateAmountRequestDownload(handleDownloadDetails.getRequestDownloadId());
             } else {
@@ -81,9 +81,9 @@ public class GeneratePathImage implements Runnable{
         handleDRDService.updateRetryAndStatusHandleDownloadDetailsByIdAndRetry(handleDownloadDetails.getIdHandleDownloadDetails());
     }
 
-    private String engineHandleImage(HandleDownloadDetails handleDownloadDetails) {
+    private String engineHandleImage(HandleDownloadDetails handleDownloadDetails) throws Exception {
         TicketToConvertImageAndPdfDto dtoTicketToConvert = createTicketToConvertImageAndPdfDto(handleDownloadDetails);
-        return ExportImageOrPdfUtils.convertTicketToImageAndPdf();
+        return ExportImageOrPdfUtils.convertTicketToImageAndPdf(dtoTicketToConvert, handleDownloadDetails.getTypeDownload());
     }
     //              0               1               2           3               4
     // Thứ tự :  NAME_GUEST => EMAIL_GUEST => PHONE_GUEST => NOTE_GUEST => TICKET_ID
@@ -95,19 +95,17 @@ public class GeneratePathImage implements Runnable{
         dto.setEmailGuest(contentUser[1]);
         dto.setPhoneGuest(contentUser[2]);
         dto.setNoteGuest(contentUser[3]);
-        dto.setPathQr(handleDownloadDetails.getPa);
+        dto.setPathQr(contentUser[4]);
         dto.setHtml(handleDownloadDetails.getHtml());
         dto.setHtmlReplace(handleDownloadDetails.getHtmlReplace());
         dto.setWidth(handleDownloadDetails.getWidth());
         dto.setHeight(handleDownloadDetails.getHeight());
-        dto.setTicketName();
-        dto.setAvatarPath();
         dto.setIsDesign(handleDownloadDetails.getIsNewTool());
         dto.setJsonData(handleDownloadDetails.getJsonData());
         dto.setIsFree(handleDownloadDetails.getIsFree());
-
-
-
+        dto.setEventId(handleDownloadDetails.getEventId());
+        dto.setTicketEventId(handleDownloadDetails.getTicketEventId());
+        return dto;
     }
 
     private void saveRecordDRDHis(HandleDownloadDetails handleDownloadDetails, String pathImage,Integer status) {

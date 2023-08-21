@@ -19,9 +19,9 @@ public class TicketToConvertImageAndPdfDto {
     private String emailGuest;
     private String phoneGuest;
     private String noteGuest;
-    private String ticketName;
-    private String avatarPath;
     private Integer isDesign;
     private String jsonData;
     private Integer isFree;
+    private Long eventId;
+    private Long ticketEventId;
 }

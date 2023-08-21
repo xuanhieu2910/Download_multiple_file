@@ -17,7 +17,7 @@ public class FileUtils {
 
     public static String exportToFileZip(List<String> listPathFile,Long eventId ,Long ticketEventId, int typeZip) {
 
-        String folderFileZip = createNameFile(eventId, ticketEventId, typeZip);
+        String folderFileZip = createNameFile(eventId, ticketEventId, typeZip, DbConstant.CONVERT_TO_OTHER);
         File file = new File(folderFileZip);
         if (!file.exists()) {
             String mkdirFileZip = "mkdir " + folderFileZip;
@@ -103,13 +103,20 @@ public class FileUtils {
         return false;
     }
 
-    public static String createNameFile(Long eventId, Long ticketEventId,Integer typeZip) {
+    public static String createNameFile(Long eventId, Long ticketEventId,Integer typeZip, Integer typeDownload) {
         String rootPath = PropertiesUtil.getProperty("vn.compedia.static.location");
         String folderFileZip = rootPath + File.separator;
-        if (typeZip == DbConstant.TYPE_FILE_DRAFT) {
+        if (typeZip == DbConstant.TYPE_FILE_NOT_DRAFT) {
             folderFileZip = folderFileZip + FOLDER_NAME_ZIP + File.separator + eventId + File.separator + ticketEventId;
         } else {
             folderFileZip = folderFileZip + FOLDER_NAME_ZIP_DRAFT + File.separator + eventId + File.separator + ticketEventId;
+        }
+
+        if (typeDownload == DbConstant.CONVERT_TO_IMAGE) {
+            folderFileZip = folderFileZip + File.separator + DbConstant.FILE_IMAGE_TEMPLATE;
+        }
+        else if (typeDownload == DbConstant.CONVERT_TO_PDF) {
+            folderFileZip = folderFileZip + File.separator + DbConstant.FILE_PDF_TEMPLATE;
         }
         return folderFileZip;
     }

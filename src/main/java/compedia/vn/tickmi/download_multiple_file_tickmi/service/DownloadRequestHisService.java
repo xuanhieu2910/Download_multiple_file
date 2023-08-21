@@ -32,7 +32,7 @@ public class DownloadRequestHisService {
             DownloadRequestHis requestHis = new DownloadRequestHis();
 
             String filePathParent = FileUtils.createNameFile(rq.getEventId(), rq.getTicketEventId(),
-                    DbConstant.TYPE_FILE_NOT_DRAFT);
+                    DbConstant.TYPE_FILE_NOT_DRAFT, rq.getTypeDownload());
             requestHis.setPathFile(filePathParent);
             requestHis.setStatus(rq.getStatus());
             requestHis.setTotalRecord(rq.getTotalRecord());

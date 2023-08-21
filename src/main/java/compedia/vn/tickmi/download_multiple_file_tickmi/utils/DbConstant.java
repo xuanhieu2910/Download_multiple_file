@@ -93,11 +93,15 @@ public class DbConstant {
     public static final Integer CONVERT_TO_IMAGE = 1;
     public static final Integer CONVERT_TO_PDF = 2;
 
+    public static final Integer CONVERT_TO_OTHER = 3;
+
     public static String DOMAIN_FILE;
 
     // Seperate of records download
     public static final String SEPARATOR_CONTENT_USER_TMP = "|<>|"; // Thứ tự :  NAME_GUEST => EMAIL_GUEST => PHONE_GUEST => NOTE_GUEST => TICKET_ID
     public static final String SEPARATOR_CONTENT_USER = "<[]>";
 
+    public final static String FILE_PDF_TEMPLATE = "pdf";
+    public final static String FILE_IMAGE_TEMPLATE = "image_template";
 
 }
