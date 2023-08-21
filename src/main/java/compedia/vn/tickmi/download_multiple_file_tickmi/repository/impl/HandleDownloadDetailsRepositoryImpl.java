@@ -107,7 +107,7 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
 
 
     private final static String SQL_updateAutoIncrementRetryByIdRecordAnd = "UPDATE HANDLE_DOWNLOAD_DETAILS detail " +
-            " SET detail.RETRY = detail.RETRY + 1  AND detail.STATUS = :status " +
+            " SET detail.RETRY = detail.RETRY + 1  , detail.STATUS = :status " +
             " WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord ";
 
     private final static String SQL_deleteRecordById = "DELETE HANDLE_DOWNLOAD_DETAILS detail " +

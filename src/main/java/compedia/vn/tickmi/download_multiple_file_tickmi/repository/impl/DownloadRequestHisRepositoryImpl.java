@@ -133,18 +133,18 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
             " where ROWNUM <= :limitRecord ";
 
     private static final String SQL_updateStatusHandleZip = "UPDATE DOWNLOAD_REQUEST_HIS his " +
-            " SET his.STATUS = :status and his.TIME_FINISHED = :timeFinshed " +
+            " SET his.STATUS = :status , his.TIME_FINISHED = :timeFinshed " +
             " WHERE his.TICKET_EVENT_ID in (:ticketEventIds) ";
 
 
     private static final String SQL_updateStatusFinishedToZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
-            " SET his.PATH_FILE = :pathFile " +
-            "    AND his.STATUS = :status " +
-            "    AND his.TIME_FINISHED = :statusTimeFinished " +
-            " WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+            "SET his.PATH_FILE = :pathFile, " +
+            "    his.STATUS = :status, " +
+            "    his.TIME_FINISHED = :statusTimeFinished " +
+            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 
     private static final String SQL_updateAmountRetryWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his  " +
-            " SET his.RETRY = his.RETRY + 1 AND his.STATUS = :status " +
+            " SET his.RETRY = his.RETRY + 1 , his.STATUS = :status " +
             " WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 
     private static final String SQL_updateStatusWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
