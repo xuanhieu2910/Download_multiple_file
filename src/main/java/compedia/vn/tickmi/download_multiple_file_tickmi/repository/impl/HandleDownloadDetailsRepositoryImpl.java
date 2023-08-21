@@ -101,16 +101,16 @@ public class HandleDownloadDetailsRepositoryImpl implements HandleDownloadDetail
             "       PATH_IMAGE," +
             "       IS_FREE, " +
             "       TYPE_DOWNLOAD " +
-            "FROM HANDLE_DOWNLOAD_DETAILS handleDownloadDetails " +
-            "WHERE handleDownloadDetails.STATUS = :status " +
+            " FROM HANDLE_DOWNLOAD_DETAILS handleDownloadDetails " +
+            " WHERE handleDownloadDetails.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";
 
 
     private final static String SQL_updateAutoIncrementRetryByIdRecordAnd = "UPDATE HANDLE_DOWNLOAD_DETAILS detail " +
-            "SET detail.RETRY = detail.RETRY + 1  AND detail.STATUS = :status " +
-            "WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord ";
+            " SET detail.RETRY = detail.RETRY + 1  AND detail.STATUS = :status " +
+            " WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord ";
 
     private final static String SQL_deleteRecordById = "DELETE HANDLE_DOWNLOAD_DETAILS detail " +
-            "WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord";
+            " WHERE detail.ID_HANDLE_DOWNLOAD_DETAILS = :idRecord";
 
 }

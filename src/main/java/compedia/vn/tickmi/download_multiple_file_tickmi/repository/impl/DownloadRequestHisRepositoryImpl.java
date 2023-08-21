@@ -126,28 +126,28 @@ public class DownloadRequestHisRepositoryImpl implements DownloadRequestHisRepos
             "              WHERE his.STATUS = :statusSuccess " +
             "              group by his.EVENT_ID, his.TICKET_EVENT_ID, " +
             "                       his.TOTAL_RECORD_FINISHED, his.PATH_FILE, his.IS_FREE) " +
-            "SELECT root.EVENT_ID, root.TICKET_EVENT_ID, " +
+            " SELECT root.EVENT_ID, root.TICKET_EVENT_ID, " +
             "       root.pathFileChild, root.TOTAL_RECORD_FINISHED, " +
             "       root.pathFileParent, root.IS_FREE " +
-            "FROM ROOT root " +
-            "where ROWNUM <= : limitRecord ";
+            " FROM ROOT root " +
+            " where ROWNUM <= :limitRecord ";
 
     private static final String SQL_updateStatusHandleZip = "UPDATE DOWNLOAD_REQUEST_HIS his " +
-            "SET his.STATUS = :status and his.TIME_FINISHED = :timeFinshed " +
-            "WHERE his.TICKET_EVENT_ID in (:ticketEventIds) ";
+            " SET his.STATUS = :status and his.TIME_FINISHED = :timeFinshed " +
+            " WHERE his.TICKET_EVENT_ID in (:ticketEventIds) ";
 
 
     private static final String SQL_updateStatusFinishedToZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
-            "SET his.PATH_FILE = :pathFile " +
+            " SET his.PATH_FILE = :pathFile " +
             "    AND his.STATUS = :status " +
             "    AND his.TIME_FINISHED = :statusTimeFinished " +
-            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+            " WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 
     private static final String SQL_updateAmountRetryWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his  " +
-            "SET his.RETRY = his.RETRY + 1 AND his.STATUS = :status " +
-            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+            " SET his.RETRY = his.RETRY + 1 AND his.STATUS = :status " +
+            " WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 
     private static final String SQL_updateStatusWhenZipFile = "UPDATE DOWNLOAD_REQUEST_HIS his " +
-            "SET his.STATUS = :status " +
-            "WHERE his.TICKET_EVENT_ID = :ticketEventId ";
+            " SET his.STATUS = :status " +
+            " WHERE his.TICKET_EVENT_ID = :ticketEventId ";
 }

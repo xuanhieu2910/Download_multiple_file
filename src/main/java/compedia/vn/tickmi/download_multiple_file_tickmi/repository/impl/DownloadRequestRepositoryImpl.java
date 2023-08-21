@@ -120,21 +120,21 @@ public class DownloadRequestRepositoryImpl implements DownloadRequestRepositoryC
             "       requestDownload.IS_NEW_TOOL, " +
             "       requestDownload.PATH_IMAGE," +
             "       requestDownload.IS_FREE, " +
-            "       requestDownload.TYPE_DOWNLOAD" +
-            "FROM DOWNLOAD_REQUEST requestDownload " +
-            "WHERE requestDownload.STATUS = :status " +
+            "       requestDownload.TYPE_DOWNLOAD " +
+            " FROM DOWNLOAD_REQUEST requestDownload " +
+            " WHERE requestDownload.STATUS = :status " +
             "  AND ROWNUM < :limitRow ";
 
     private static String SQL_updateAmountByExportRecordSuccess = "UPDATE DOWNLOAD_REQUEST re " +
-            "SET re.TOTAL_RECORD_FINISHED = re.TOTAL_RECORD_FINISHED + 1 " +
-            "WHERE re.ID_REQUEST_DOWNLOAD = :idRequestDownload ";
+            " SET re.TOTAL_RECORD_FINISHED = re.TOTAL_RECORD_FINISHED + 1 " +
+            " WHERE re.ID_REQUEST_DOWNLOAD = :idRequestDownload ";
 
     private static String SQL_flatStatusByIdParent = "UPDATE DOWNLOAD_REQUEST re " +
-            "SET re.FLAT_STATUS = :flatStatus " +
-            "WHERE re.ID_REQUEST_DOWNLOAD = :idRequestDownload ";
+            " SET re.FLAT_STATUS = :flatStatus " +
+            " WHERE re.ID_REQUEST_DOWNLOAD = :idRequestDownload ";
 
     private static String SQL_updateStatusWhenDone = "UPDATE DOWNLOAD_REQUEST downloadRequest " +
             " SET downloadRequest.STATUS = :statusDone " +
-            "WHERE downloadRequest.ID_REQUEST_DOWNLOAD = :idRequestDownload " +
-            "AND downloadRequest.TOTAL_RECORD_FINISHED = downloadRequest.TOTAL_RECORD ";
+            " WHERE downloadRequest.ID_REQUEST_DOWNLOAD = :idRequestDownload " +
+            " AND downloadRequest.TOTAL_RECORD_FINISHED = downloadRequest.TOTAL_RECORD ";
 }
